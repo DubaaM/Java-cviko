@@ -1,3 +1,3 @@
 ### Employees
-![Employees](demo/screenshots/Employees.png)
+![Employees](demo/screenshots/Emoloyees.png)
 
