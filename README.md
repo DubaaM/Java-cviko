@@ -1,8 +1,3 @@
-### EMAIL
-![Email](demo/screenshots/EMAIL.png)
+### Employees
+![Employees](demo/screenshots/Emoloyees.png)
 
-### SMS
-![SMS](demo/screenshots/SMS.png)
-
-### PUSH
-![PUSH](demo/screenshots/PUSH.png)
