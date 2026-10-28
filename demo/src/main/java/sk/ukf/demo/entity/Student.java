@@ -2,22 +2,31 @@ package sk.ukf.demo.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "student")
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
-    @Column(name = "first_name")
+    @NotBlank(message = "Meno je povinné")
+    @Size(min = 2, max = 50, message = "Meno musí mať 2-50 znakov")
+    @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 
-    @Column(name = "last_name")
+    @NotBlank(message = "Priezvisko je povinné")
+    @Size(min = 2, max = 50, message = "Priezvisko musí mať 2-50 znakov")
+    @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
 
-    @Column(name = "email")
+    @NotBlank(message = "Email je povinný")
+    @Email(message = "Neplatný email")
+    @Size(max = 100, message = "Email môže mať najviac 100 znakov")
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
     public Integer getId() {
