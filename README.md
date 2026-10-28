@@ -1,7 +1,7 @@
 
-![Employees](demo/screenshots/ADD.png)
-![Employees](demo/screenshots/DELETE.png)
-![Employees](demo/screenshots/GETALL.png)
-![Employees](demo/screenshots/GETBYID.png)
+![Employees](demo/screenshots/NEWDELETE.png)
+![Employees](demo/screenshots/NEWPUT.png)
+![Employees](demo/screenshots/EMAILPATTERN.png)
+
 
 
