@@ -11,11 +11,15 @@ import java.util.Map;
 public class ResponseFactory {
 
     public ResponseEntity<ResponseWrapper<Void>> ok(String message) {
-        return ResponseEntity.ok(new ResponseWrapper<>(message, null, null));
+        return ResponseEntity.ok(
+                new ResponseWrapper<>(message, null, null)
+        );
     }
 
     public <T> ResponseEntity<ResponseWrapper<T>> ok(String message, T data) {
-        return ResponseEntity.ok(new ResponseWrapper<>(message, data, null));
+        return ResponseEntity.ok(
+                new ResponseWrapper<>(message, data, null)
+        );
     }
 
     public <T> ResponseEntity<ResponseWrapper<T>> created(String message, T data) {
@@ -24,15 +28,23 @@ public class ResponseFactory {
                 .body(new ResponseWrapper<>(message, data, null));
     }
 
-    public ResponseEntity<ResponseWrapper<Void>> error(HttpStatus status, String message) {
+    public ResponseEntity<ResponseWrapper<Void>> error(
+            HttpStatus status,
+            String message
+    ) {
         return ResponseEntity
                 .status(status)
                 .body(new ResponseWrapper<>(message, null, null));
     }
 
-    public ResponseEntity<ResponseWrapper<Void>> error(HttpStatus status, String message, List<Map<String, String>> errors) {
+    public ResponseEntity<ResponseWrapper<Void>> error(
+            HttpStatus status,
+            String message,
+            List<Map<String, String>> errors
+    ) {
         return ResponseEntity
                 .status(status)
                 .body(new ResponseWrapper<>(message, null, errors));
     }
 }
+

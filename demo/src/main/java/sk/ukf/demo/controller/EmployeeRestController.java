@@ -1,11 +1,15 @@
-package sk.ukf.demo.controller;
 
-import org.springframework.http.HttpStatus;
+        package sk.ukf.demo.controller;
+
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 import sk.ukf.demo.entity.Employee;
 import sk.ukf.demo.service.EmployeeService;
+import sk.ukf.demo.response.ResponseFactory;
+import sk.ukf.demo.response.ResponseWrapper;
 
 import java.util.List;
 
@@ -14,20 +18,29 @@ import java.util.List;
 public class EmployeeRestController {
 
     private final EmployeeService employeeService;
+    private final ResponseFactory response;
 
-    public EmployeeRestController(EmployeeService employeeService) {
+    public EmployeeRestController(
+            EmployeeService employeeService,
+            ResponseFactory response
+    ) {
         this.employeeService = employeeService;
+        this.response = response;
     }
 
     // GET /api/employees
     @GetMapping("/employees")
-    public List<Employee> getAllEmployees() {
-        return employeeService.findAll();
+    public ResponseEntity<ResponseWrapper<List<Employee>>> getAllEmployees() {
+        List<Employee> employees = employeeService.findAll();
+
+        return response.ok("Employees retrieved successfully", employees);
     }
 
     // GET /api/employees/{id}
     @GetMapping("/employees/{id}")
-    public Employee getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<ResponseWrapper<Employee>> getEmployeeById(
+            @PathVariable Long id
+    ) {
         Employee employee = employeeService.findById(id);
 
         if (employee == null) {
@@ -37,46 +50,60 @@ public class EmployeeRestController {
             );
         }
 
-        return employee;
+        return response.ok("Employee retrieved successfully", employee);
     }
 
     // POST /api/employees
     @PostMapping("/employees")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Employee addEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<ResponseWrapper<Employee>> addEmployee(
+            @Valid @RequestBody Employee employee
+    ) {
         employee.setId(null);
-        return employeeService.save(employee);
+
+        Employee savedEmployee = employeeService.save(employee);
+
+        return response.created("Employee created successfully", savedEmployee);
     }
 
     // PUT /api/employees/{id}
     @PutMapping("/employees/{id}")
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
+    public ResponseEntity<ResponseWrapper<Employee>> updateEmployee(
+            @PathVariable Long id,
+            @Valid @RequestBody Employee employee
+    ) {
         Employee existingEmployee = employeeService.findById(id);
 
         if (existingEmployee == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee id not found - " + id);
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Employee not found with id: " + id
+            );
         }
 
         employee.setId(id);
+
         Employee updatedEmployee = employeeService.save(employee);
 
-        return updatedEmployee;
+        return response.ok("Employee updated successfully", updatedEmployee);
     }
 
-
-
-
+    // DELETE /api/employees/{id}
     @DeleteMapping("/employees/{id}")
-    public String deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<ResponseWrapper<Void>> deleteEmployee(
+            @PathVariable Long id
+    ) {
         Employee employee = employeeService.findById(id);
 
         if (employee == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee id not found - " + id);
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Employee not found with id: " + id
+            );
         }
 
         employeeService.deleteById(id);
 
-        return "Employee deleted successfully - " + id;
+        return response.ok("Employee deleted successfully");
     }
-
 }
+

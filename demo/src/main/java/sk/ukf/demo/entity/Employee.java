@@ -3,12 +3,17 @@ package sk.ukf.demo.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 
 @Entity
 @Table(name = "employee")
@@ -18,13 +23,30 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "First name must not be blank")
     private String first_name;
+
+    @NotBlank(message = "Last name must not be blank")
     private String last_name;
+
+    @NotNull(message = "Birth date must not be null")
     private LocalDate birth_date;
+
+    @NotBlank(message = "Email must not be blank")
+    @Email(message = "Email must have a valid format")
+    @Pattern(
+            regexp = "^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$",
+            message = "Email does not match the required email format"
+    )
     private String email;
+
     private String phone;
+
     private String job_title;
+
+    @PositiveOrZero(message = "Salary must be zero or greater")
     private BigDecimal salary;
+
     private Boolean full_time;
 
     public Employee() {

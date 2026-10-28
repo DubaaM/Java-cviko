@@ -1,25 +1,21 @@
 package sk.ukf.demo.response;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
 public class ResponseWrapper<T> {
-    private String message;
+
     private T data;
+    private String message;
     private List<Map<String, String>> errors;
+    private Instant timestamp;
 
     public ResponseWrapper(String message, T data, List<Map<String, String>> errors) {
-        this.message = message;
         this.data = data;
-        this.errors = errors;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
         this.message = message;
+        this.errors = errors;
+        this.timestamp = Instant.now();
     }
 
     public T getData() {
@@ -30,11 +26,27 @@ public class ResponseWrapper<T> {
         this.data = data;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public List<Map<String, String>> getErrors() {
         return errors;
     }
 
     public void setErrors(List<Map<String, String>> errors) {
         this.errors = errors;
+    }
+
+    public Instant getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Instant timestamp) {
+        this.timestamp = timestamp;
     }
 }
